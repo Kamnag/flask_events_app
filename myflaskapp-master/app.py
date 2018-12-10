@@ -190,7 +190,7 @@ def edit_event(id):
 
     if request.method == 'POST' and form.validate():
         title = request.form['title']
-        body = request.form['body']
+        body = request.form['body']t
 
         # Create Cursor
         cur = mysql.connection.cursor()

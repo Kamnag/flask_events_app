@@ -33,25 +33,10 @@ def events():
     for a in range(len(det)):
         if det[a]['type'] == 'event':
             events.append(det[a])
-    if(len(events)>0):
+    if (len(events) > 0):
         return render_template('events.html', events=events)
     msg = 'No Events Found'
     return render_template('events.html', msg=msg)
-
-    # cur = mysql.connection.cursor()
-    #
-    # # Get events
-    # result = cur.execute("SELECT * FROM events")
-    #
-    # events = cur.fetchall()
-    #
-    # if result > 0:
-    #     return render_template('events.html', events=events)
-    # else:
-    #     msg = 'No Events Found'
-    #     return render_template('events.html', msg=msg)
-    # # Close connection
-    # cur.close()
 
 
 # Single Event
@@ -62,20 +47,9 @@ def event(id):
     for a in db:
         det.append(db[a])
     for a in range(len(det)):
-        if det[a]['type'] == 'event' and det[a]['_id']==id:
+        if det[a]['type'] == 'event' and det[a]['_id'] == id:
             event.append(det[a])
     return render_template('event.html', event=event)
-"""
-    # Create cursor
-    cur = mysql.connection.cursor()
-
-    # Get event
-    result = cur.execute("SELECT * FROM events WHERE id = %s", [id])
-
-    event = cur.fetchone()
-"""
-
-
 
 
 # Register Form Class
@@ -103,18 +77,6 @@ def register():
         doc = {'name': name, 'email': email, 'username': username, 'password': password, 'type': 'user'}
         db.save(doc)
 
-        # Create cursor
-        # cur = mysql.connection.cursor()
-
-        # Execute query
-        # cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
-        #
-        # # Commit to DB
-        # mysql.connection.commit()
-        #
-        # # Close connection
-        # cur.close()
-
         flash('You are now registered and can log in', 'success')
 
         return redirect(url_for('login'))
@@ -128,10 +90,7 @@ def login():
         # Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
-        # Create cursor
-        # cur = mysql.connection.cursor()
-        # Get user by username
-        # result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+
         det = []
         for a in db:
             det.append(db[a])
@@ -184,6 +143,7 @@ def dashboard():
         msg = 'No Events Found'
         return render_template('dashboard.html', msg=msg)
 
+
 # Event Form Class
 class EventForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=200)])
@@ -203,26 +163,16 @@ def add_event():
         flash('Event Created', 'success')
         return redirect(url_for('dashboard'))
     return render_template('add_event.html', form=form)
-"""
-        # Create Cursor
-        cur = mysql.connection.cursor()
-
-        # Execute
-        cur.execute("INSERT INTO events(title, body, author) VALUES(%s, %s, %s)", (title, body, session['username']))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
-"""
-
 
 
 # Edit Event
 @app.route('/edit_event/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
 def edit_event(id):
+    flash('Edit operation currently does not work')
+
+
+"""
     # Create cursor
     cur = mysql.connection.cursor()
 
@@ -258,12 +208,17 @@ def edit_event(id):
         return redirect(url_for('dashboard'))
 
     return render_template('edit_event.html', form=form)
+"""
 
 
 # Delete Event
 @app.route('/delete_event/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_event(id):
+    flash('Edit operation currently does not work')
+
+
+"""
     # Create cursor
     cur = mysql.connection.cursor()
 
@@ -279,7 +234,7 @@ def delete_event(id):
     flash('Event Deleted', 'success')
 
     return redirect(url_for('dashboard'))
-
+"""
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'

@@ -1,26 +1,13 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
-#from data import Articles
-# from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+import couchdb
 from passlib.hash import sha256_crypt
 from functools import wraps
-import couchdb
 
 app = Flask(__name__)
 couch = couchdb.Server()
-# Creating Database
+# Usinging Database
 db = couch['events']
-
-# Config MySQL
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = '123456'
-# app.config['MYSQL_DB'] = 'myflaskapp'
-# app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-# # init MYSQL
-# mysql = MySQL(app)
-
-#Articles = Articles()
 
 # Index
 @app.route('/')
@@ -114,17 +101,29 @@ def register():
 # User login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+	if request.method == 'POST':
         # Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
-
         # Create cursor
-        cur = mysql.connection.cursor()
-
+        #cur = mysql.connection.cursor()
         # Get user by username
-        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
-
+        #result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+		det = []
+		for a in db:
+			det.append(db[a])
+		for a in range (len(det)):
+			if(det[a]['username']==username and sha256_crypt.verify(password_candidate, det[a]['password'])):
+				session['logged_in'] = True
+				session['username'] = username
+				flash('You are now logged in', 'success')
+				return redirect(url_for('dashboard'))
+			else:
+				error = 'Invalid login'
+				return render_template('login.html',error=error)
+		
+				
+"""
         if result > 0:
             # Get stored hash
             data = cur.fetchone()
@@ -146,6 +145,7 @@ def login():
         else:
             error = 'Username not found'
             return render_template('login.html', error=error)
+"""
 
     return render_template('login.html')
 

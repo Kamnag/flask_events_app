@@ -1,0 +1,5 @@
+flask
+couchdb
+wtforms
+passlib.hash
+functools

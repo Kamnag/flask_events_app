@@ -33,7 +33,7 @@ def events():
     for a in range(len(det)):
         if det[a]['type'] == 'event':
             events.append(det[a])
-    if (len(events) > 0):
+    if len(events) > 0:
         return render_template('events.html', events=events)
     msg = 'No Events Found'
     return render_template('events.html', msg=msg)
@@ -172,69 +172,13 @@ def edit_event(id):
     flash('Edit operation currently does not work')
 
 
-"""
-    # Create cursor
-    cur = mysql.connection.cursor()
-
-    # Get event by id
-    result = cur.execute("SELECT * FROM events WHERE id = %s", [id])
-
-    event = cur.fetchone()
-    cur.close()
-    # Get form
-    form = EventForm(request.form)
-
-    # Populate event form fields
-    form.title.data = event['title']
-    form.body.data = event['body']
-
-    if request.method == 'POST' and form.validate():
-        title = request.form['title']
-        body = request.form['body']t
-
-        # Create Cursor
-        cur = mysql.connection.cursor()
-        app.logger.info(title)
-        # Execute
-        cur.execute("UPDATE events SET title=%s, body=%s WHERE id=%s", (title, body, id))
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
-
-        flash('Event Updated', 'success')
-
-        return redirect(url_for('dashboard'))
-
-    return render_template('edit_event.html', form=form)
-"""
-
-
 # Delete Event
+
 @app.route('/delete_event/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_event(id):
     flash('Edit operation currently does not work')
 
-
-"""
-    # Create cursor
-    cur = mysql.connection.cursor()
-
-    # Execute
-    cur.execute("DELETE FROM events WHERE id = %s", [id])
-
-    # Commit to DB
-    mysql.connection.commit()
-
-    # Close connection
-    cur.close()
-
-    flash('Event Deleted', 'success')
-
-    return redirect(url_for('dashboard'))
-"""
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'
